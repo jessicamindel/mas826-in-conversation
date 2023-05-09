@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+	<title>MAS.826 In Conversation with Creativity</title>
+</head>
+<body>
+	<!--TODO: Background image and margins etc. for the entire thing-->
+	<div id="intro-container" class="fades" style="display: none">
+		<h2>In Conversation with Creativity</h2>
+		<button id="begin-button">Begin</button>
+	</div>
+	<div id="qa-container" class="fades" style="display: none">
+		<h2 id="question">This is a sample question.</h2>
+		<textarea id="response"></textarea>
+		<br/>
+		<button id="next-button">Next</button>
+	</div>
+	<div id="result-container" class="fades" style="display: none">
+		<p>To-do: Show printing info + annotation type</p>
+	</div>
+
+	<style>
+		.fades {
+			transition: opacity 1s linear;
+		}
+	</style>
+
+	<script>
+		const els = {
+			introContainer: document.querySelector('#intro-container'),
+			qaContainer: document.querySelector('#qa-container'),
+			resultContainer: document.querySelector('#result-container'),
+			question: document.querySelector('#question'),
+			response: document.querySelector('#response'),
+			nextButton: document.querySelector('#next-button'),
+			beginButton: document.querySelector('#begin-button'),
+		};
+
+		els.introContainer.style.opacity = 0;
+		els.introContainer.style.display = "block";
+		setTimeout(() => {
+			els.introContainer.style.opacity = 1;
+		}, 200);
+
+		
+	</script>
+</body>
