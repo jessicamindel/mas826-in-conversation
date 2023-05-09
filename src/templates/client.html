@@ -20,27 +20,9 @@
 
 	<style>
 		.fades {
-			transition: opacity 1s linear;
+			transition: opacity 0.5s linear;
 		}
 	</style>
 
-	<script>
-		const els = {
-			introContainer: document.querySelector('#intro-container'),
-			qaContainer: document.querySelector('#qa-container'),
-			resultContainer: document.querySelector('#result-container'),
-			question: document.querySelector('#question'),
-			response: document.querySelector('#response'),
-			nextButton: document.querySelector('#next-button'),
-			beginButton: document.querySelector('#begin-button'),
-		};
-
-		els.introContainer.style.opacity = 0;
-		els.introContainer.style.display = "block";
-		setTimeout(() => {
-			els.introContainer.style.opacity = 1;
-		}, 200);
-
-		
-	</script>
+	<script src="./static/client.js"></script>
 </body>
