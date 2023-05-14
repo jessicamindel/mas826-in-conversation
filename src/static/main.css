@@ -1,0 +1,55 @@
+main.css
+
+body,
+html {
+	height: 100%;
+	/* line-height: 1.8; */
+	font-family: 'Karla', sans-serif;
+	background-color: #3927C1;
+	padding: 100px 0 50px;
+}
+
+p{
+	height: 100%;
+	font-family: 'Karla', sans-serif;
+	font-color: white;
+	text-align: center;
+	vertical-align: center;
+	font-size: 16px;
+	padding: 100px 0 50px;
+}
+
+h4{
+	height: 100%;
+	font-family: 'Karla', sans-serif;
+	font-color: white;
+	text-align: center;
+	vertical-align: center;
+	font-size: 16px;
+	padding: 100px 0 50px;
+}
+
+h1{
+	color: white;
+	font-family: 'Karla', sans-serif;
+	text-align: center;
+	padding: 100px 0 50px;
+}
+
+.content{
+	max-width: 500px;
+	margin: auto;
+}
+
+.fades {
+	transition: opacity 0.5s linear;	
+	margin: auto;
+}
+
+/*.button{
+	margin: auto;
+	padding: 10px;
+	background-color: red;
+	font-size: larger;
+	position: absolute;
+}*/

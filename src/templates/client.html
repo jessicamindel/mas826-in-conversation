@@ -1,28 +1,35 @@
 <!DOCTYPE html>
+
 <head>
 	<title>MAS.826 In Conversation with Creativity</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./static/main.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Karla&display=swap" rel="stylesheet">
 </head>
+
 <body>
 	<!--TODO: Background image and margins etc. for the entire thing-->
-	<div id="intro-container" class="fades" style="display: none">
-		<h2>In Conversation with Creativity</h2>
-		<button id="begin-button">Begin</button>
-	</div>
-	<div id="qa-container" class="fades" style="display: none">
-		<h2 id="question">This is a sample question.</h2>
-		<textarea id="response"></textarea>
-		<br/>
-		<button id="next-button">Next</button>
-	</div>
-	<div id="result-container" class="fades" style="display: none">
-		<p>To-do: Show printing info + annotation type</p>
-	</div>
 
-	<style>
-		.fades {
-			transition: opacity 0.5s linear;
-		}
-	</style>
+		<div id="intro-container" class="fades" style="display: none">
+			<h1>In Conversation with Creativity</h1>
+			<button id="begin-button">Begin</button>
+		</div>
+
+
+		<div id="qa-container" class="fades" style="display: none">
+			<h1 id="question">This is a sample question.</h2>
+			<textarea id="response"></textarea>
+			<br/>
+			<button id="next-button">Next</button>
+		</div>
+
+		<div id="result-container" class="fades" style="display: none">
+			<h4>Thanks for contributing to this project. Printer #1 will print your responses and the responses of others. Have fun reading through the receipts, and feel free to grab a pen and annotate the receipts with any thoughts or doodles that come to mind.</h4>
+		</div>
+
 
 	<script src="./static/client.js"></script>
 </body>

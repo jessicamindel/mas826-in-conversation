@@ -17,7 +17,7 @@ QUESTIONS = [
 	"Consider how you feel while engaging in that creative process. Write a few ambiguous steps someone else could interpret to retrace the experience you have while creating in a medium of your choice."
 ]
 
-USE_PREEXISTING_FILE = "data/icwc_1683672331.json" # None or filename
+USE_PREEXISTING_FILE = None # None or filename
 
 # -- UTILS & MAIN LOGIC -- #
 
