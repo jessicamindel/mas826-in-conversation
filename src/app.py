@@ -90,6 +90,17 @@ def mangleWithGPT(text):
 def addToNGrams(participantId, questionIdx, text):
 	ngramsModel.add_corpus(text, f"{participantId}_{questionIdx}")
 
+def generateGPTManglingPrompt():
+	if len(responses.keys()) == 0:
+		return "Make me anew. Dig for something until you forgot what you were looking for."
+	# Use ChatGPT on the "instructions" question, the third one
+	participantResponses = []
+	while len(participantResponses) < 3:
+		participantIdx = math.floor(random() * len(responses.keys()))
+		participantId = [k for k in responses.keys()][participantIdx]
+		participantResponses = responses[participantId]
+	return responses[participantId][2]
+
 def generateMangled():
 	global responses
 
@@ -182,6 +193,28 @@ def routeSendToPrinter1():
 	message = "Hello to printer 1 at time " + str(time.time())
 	sendToPrinter(message, 1)
 	return "Sent the following: \"" + message + "\""
+
+@app.route('/api/printGPT')
+def printRandomGPT():
+	for i in range(200):
+		possiblePrompts = [
+			"can you give me a short answer for something creative that you heard of recently?",
+			"in 10 words or less, can you give me an abstract process for creativity?",
+			f"Imagine that you are a surrealist creative writer. Someone provides you the following instructions for how to write a very short, surreal, fragmented, choppy, ambiguous piece of provocative prose: \"{generateGPTManglingPrompt()}\" What do you write?"
+		]
+		idx = math.floor(random() * len(possiblePrompts))
+		prompt = possiblePrompts[idx]
+		completion = openai.ChatCompletion.create(
+			model="gpt-3.5-turbo",
+			messages=[
+				{"role": "user", "content": prompt}
+			]
+		)
+		success = False
+		while not success:
+			success = sendToPrinterWithHandshake(completion.choices[0].message.content, 1, 5)
+	return "Printed"
+
 
 if USE_PREEXISTING_FILE is not None:
 	print(f"Retrieving previously logged JSON data from \"{filename}\"...", file=sys.stderr)
