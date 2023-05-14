@@ -93,6 +93,7 @@ function submitQuestionAndAdvance() {
 
 		questionIdx++;
 		if (questionIdx >= numQuestions) {
+			// Advance to final page with annotation type
 			els.qaContainer.style.opacity = 0;
 			els.introContainer.style.opacity = 0;
 			setTimeout(() => {
@@ -106,9 +107,18 @@ function submitQuestionAndAdvance() {
 				}, 100);
 			}, 500);
 			// TODO: Pipe in new input for this
-			setTimeout(() => {
-				resetDisplay();
-			}, 20 * 1000);
+			// setTimeout(() => {
+			// 	resetDisplay();
+			// }, 20 * 1000);
+
+			// In the background, print the output
+			fetch('/api/printParticipant', {
+				method: 'POST',
+				"headers": {"Content-Type": "application/json"},
+				"body": JSON.stringify({
+					participantId: participantId,
+				}),
+			}); // We don't care about the result, let it happen in the background
 		} else {
 			els.response.value = '';
 			els.question.innerText = data.questionText;

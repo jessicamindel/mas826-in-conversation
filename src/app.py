@@ -125,23 +125,27 @@ def advanceQuestion():
 	saveData()
 	
 	if prevQuestionIdx == len(QUESTIONS) - 1:
-		# Print everything from this participant
-		for i in range(len(QUESTIONS)):
-			currText = responses[participantId][i]
-			print("Sending text:", currText)
-			sendToPrinter(currText, 1)
-			result = ser.readline()
-			print(result)
-		print("Sending linebreak")
-		sendToPrinter("", 1)
-		result = ser.readline()
-		print(result)
-		ser.close()
-
 		# Advance to close page
 		return f"{{ \"annotationType\": \"{determineAnnotationType(participantId)}\" }}"
 	else:
 		return f"{{ \"questionText\": \"{QUESTIONS[prevQuestionIdx + 1]}\" }}"
+	
+@app.route('/api/printParticipant', methods=['POST'])
+def printParticipant():
+	participantId = request.json['participantId']
+	# Print everything from this participant
+	for i in range(len(QUESTIONS)):
+		currText = responses[participantId][i]
+		print("Sending text:", currText)
+		sendToPrinter(currText, 1)
+		result = ser.readline()
+		print(result)
+	print("Sending linebreak")
+	sendToPrinter("", 1)
+	result = ser.readline()
+	print(result)
+	ser.close()
+	return "Success"
 
 @app.route('/api/generateMangled')
 def generateMangledEndpoint():
