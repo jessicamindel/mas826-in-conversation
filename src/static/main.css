@@ -7,6 +7,8 @@ html {
 	font-family: 'Karla', sans-serif;
 	background-color: #3927C1;
 	padding: 100px 0 50px;
+	margin: auto;
+	text-align: center;
 }
 
 p{
@@ -36,6 +38,11 @@ h1{
 	padding: 100px 0 50px;
 }
 
+.button-style{
+	text-align: center;
+	margin: auto;
+}
+
 .content{
 	max-width: 500px;
 	margin: auto;
@@ -46,10 +53,10 @@ h1{
 	margin: auto;
 }
 
-/*.button{
+#begin-button {
 	margin: auto;
-	padding: 10px;
+}
+
+.button{
 	background-color: red;
-	font-size: larger;
-	position: absolute;
-}*/
+}
