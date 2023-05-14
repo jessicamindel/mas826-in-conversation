@@ -18,9 +18,9 @@ QUESTIONS = [
 	"Consider how you feel while engaging in that creative process. Write a few ambiguous steps someone else could interpret to retrace the experience you have while creating in a medium of your choice."
 ]
 
-USE_PREEXISTING_FILE = None # "data/icwc_1683672331.json" # None or filename
+USE_PREEXISTING_FILE = None # "data/MAIN_icwc_1683672331.json" # "data/icwc_1683672331.json" # None or filename
 
-SERIAL_PORT = "/dev/tty.usbmodem11301"
+SERIAL_PORT = "/dev/tty.usbmodem14201"
 SERIAL_BAUD_RATE = 9600
 
 # -- UTILS & MAIN LOGIC -- #
