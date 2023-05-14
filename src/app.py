@@ -9,6 +9,7 @@ import os
 import openai
 import sys
 import serial
+from func_timeout import func_timeout, FunctionTimedOut
 
 # -- PARAMS -- #
 
@@ -20,7 +21,7 @@ QUESTIONS = [
 
 USE_PREEXISTING_FILE = None # "data/icwc_1683672331.json" # None or filename
 
-SERIAL_PORT = "/dev/tty.usbmodem11301"
+SERIAL_PORT = "/dev/cu.usbmodem2101"
 SERIAL_BAUD_RATE = 9600
 
 # -- UTILS & MAIN LOGIC -- #
@@ -61,6 +62,19 @@ def sendToPrinter(text, printerIdx):
 		ser.open()
 		time.sleep(1)
 	ser.write((f"{printerIdx}{text}|").encode("UTF-8"))
+
+def sendToPrinterWithHandshake(text, printerIdx, timeout=10):
+	sendToPrinter(text, printerIdx)
+	print(f"Sending text to {printerIdx}: {text}")
+	sendToPrinter(text, printerIdx)
+	
+	try:
+		result = func_timeout(timeout, ser.readline)
+		print(result)
+		return True
+	except FunctionTimedOut:
+		print("Failed to send: timed out.")
+		return False
 
 # Mangling Text
 
@@ -136,14 +150,20 @@ def printParticipant():
 	# Print everything from this participant
 	for i in range(len(QUESTIONS)):
 		currText = responses[participantId][i]
-		print("Sending text:", currText)
-		sendToPrinter(currText, 1)
-		result = ser.readline()
-		print(result)
-	print("Sending linebreak")
-	sendToPrinter("", 1)
-	result = ser.readline()
-	print(result)
+		# print("Sending text:", currText)
+		# sendToPrinter(currText, 1)
+		# result = ser.readline()
+		# print(result)
+		success = False
+		while not success:
+			success = sendToPrinterWithHandshake(currText, 1)
+	# print("Sending linebreak")
+	# sendToPrinter("", 1)
+	# result = ser.readline()
+	# print(result)
+	success = False
+	while not success:
+		success = sendToPrinterWithHandshake("", 1)
 	ser.close()
 	return "Success"
 
