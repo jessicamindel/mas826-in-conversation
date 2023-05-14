@@ -1,5 +1,5 @@
 from uuid import uuid4
-from time import time
+import time
 from random import random
 import math
 import json
@@ -8,6 +8,7 @@ import ngrams.ngrams as ngrams
 import os
 import openai
 import sys
+import serial
 
 # -- PARAMS -- #
 
@@ -17,17 +18,22 @@ QUESTIONS = [
 	"Consider how you feel while engaging in that creative process. Write a few ambiguous steps someone else could interpret to retrace the experience you have while creating in a medium of your choice."
 ]
 
-USE_PREEXISTING_FILE = "data/icwc_1683672331.json" # None or filename
+USE_PREEXISTING_FILE = None # "data/icwc_1683672331.json" # None or filename
+
+SERIAL_PORT = "/dev/tty.usbmodem11301"
+SERIAL_BAUD_RATE = 9600
 
 # -- UTILS & MAIN LOGIC -- #
 
-filename = f"data/icwc_{round(time())}.json" if USE_PREEXISTING_FILE is None else USE_PREEXISTING_FILE
+filename = f"data/icwc_{round(time.time())}.json" if USE_PREEXISTING_FILE is None else USE_PREEXISTING_FILE
 responses = dict()
 ngramsModel = ngrams.NGramModel(lambda x: x.split(" "), lambda x: " ".join(x), 2)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
+
+ser = None
 
 # JSON Data
 
@@ -50,8 +56,11 @@ def storeResponse(participantId, text):
 # Printing
 
 def sendToPrinter(text, printerIdx):
-	# TODO: Once printer arrives get this up and running
-	pass
+	# TODO: Vary by printerIdx
+	if not ser.is_open:
+		ser.open()
+		time.sleep(1)
+	ser.write((f"{printerIdx}{text}|").encode("UTF-8"))
 
 # Mangling Text
 
@@ -116,6 +125,19 @@ def advanceQuestion():
 	saveData()
 	
 	if prevQuestionIdx == len(QUESTIONS) - 1:
+		# Print everything from this participant
+		for i in range(len(QUESTIONS)):
+			currText = responses[participantId][i]
+			print("Sending text:", currText)
+			sendToPrinter(currText, 1)
+			result = ser.readline()
+			print(result)
+		print("Sending linebreak")
+		sendToPrinter("", 1)
+		result = ser.readline()
+		print(result)
+		ser.close()
+
 		# Advance to close page
 		return f"{{ \"annotationType\": \"{determineAnnotationType(participantId)}\" }}"
 	else:
@@ -125,6 +147,17 @@ def advanceQuestion():
 def generateMangledEndpoint():
 	return generateMangled()
 
+@app.route('/api/testPrint0')
+def routeSendToPrinter0():
+	message = "Hello to printer 0 at time " + str(time.time())
+	sendToPrinter(message, 0)
+	return "Sent the following: \"" + message + "\""
+
+@app.route('/api/testPrint1')
+def routeSendToPrinter1():
+	message = "Hello to printer 1 at time " + str(time.time())
+	sendToPrinter(message, 1)
+	return "Sent the following: \"" + message + "\""
 
 if USE_PREEXISTING_FILE is not None:
 	print(f"Retrieving previously logged JSON data from \"{filename}\"...", file=sys.stderr)
@@ -139,6 +172,9 @@ if USE_PREEXISTING_FILE is not None:
 else:
 	print(f"Creating new JSON file at \"{filename}\"...", file=sys.stderr)
 	saveData()
+
+print("Connecting to serial...")
+ser = serial.Serial(SERIAL_PORT, SERIAL_BAUD_RATE)
 
 if __name__ == '__main__':
 	print("Starting Flask server...\n", file=sys.stderr)
